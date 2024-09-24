@@ -50,7 +50,7 @@ def connect(index):
     else:
         print("Invalid directory index!")
 
-def list_things():
+def listThings():
     things = utils.loadFromFile(thingsSave)
     if things:
         for i, thing in enumerate(things):
@@ -73,7 +73,7 @@ def list_things():
     else:
         print("No things connected. Use 'gl connect' to connect to a directory.")
 
-def list_thing_endpoints(index):
+def listThingsEndpoint(index):
     things = utils.loadFromFile(thingsSave)
     if 0 <= index < len(things):
         thing = things[index]
@@ -89,27 +89,21 @@ def list_thing_endpoints(index):
 
 def main():
     global wotDirectories, things
+ 
+    wotDirectories = utils.loadFromFile(jsonSave) or [] #Load previously saved directories and things
+    things = utils.loadFromFile(thingsSave) or []
 
-    # Load previously saved directories and things
-    wotDirectories = utils.loadFromFile(jsonSave) or []
-    things = utils.loadFromFile("things.json") or []
-
-    # Continue with argument parsing and function calls
     parser = argparse.ArgumentParser(description="GLAgent CLI for WoT")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Discover WoT directories
-    subparsers.add_parser('discover', help="Discover WoT directories")
+    subparsers.add_parser('discover', help="Discover WoT directories") #Discover WoT directories
 
-    # Connect to WoT directory
-    connect_parser = subparsers.add_parser('connect', help="Connect to a WoT directory")
+    connect_parser = subparsers.add_parser('connect', help="Connect to a WoT directory")  #Connect to WoT directory
     connect_parser.add_argument('index', type=int, help="Index of the directory to connect to")
 
-    # List all Things
-    subparsers.add_parser('list', help="List all Things in the connected WoT directory")
+    subparsers.add_parser('list', help="List all Things in the connected WoT directory") #List all things
 
-    # List all endpoints for a specific Thing
-    endpoint_parser = subparsers.add_parser('endpoints', help="List all endpoints of a specific Thing")
+    endpoint_parser = subparsers.add_parser('endpoints', help="List all endpoints of a specific Thing") #List all endpoints for a specific thing
     endpoint_parser.add_argument('index', type=int, help="Index of the Thing to list endpoints for")
 
     args = parser.parse_args()
@@ -121,10 +115,10 @@ def main():
         connect(args.index)
 
     elif args.command == 'list':
-        list_things()
+        listThings()
 
     elif args.command == 'endpoints':
-        list_thing_endpoints(args.index)
+        listThingsEndpoint(args.index)
 
 if __name__ == "__main__":
     main()
