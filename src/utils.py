@@ -7,7 +7,7 @@ def save_to_file(data, filename):
         json.dump(data, file)
 
 # Load data from a JSON file
-def load_from_file(filename):
+def loadFromFile(filename):
     if os.path.exists(filename):
         with open(filename, 'r') as file:
             return json.load(file)
