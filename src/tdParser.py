@@ -1,4 +1,4 @@
-def list_endpoints(thing):
+def listEndpoints(thing):
     endpoints = []
     if 'base' in thing and 'actions' in thing:
         base_url = thing['base']

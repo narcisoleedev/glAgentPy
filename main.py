@@ -1,8 +1,8 @@
 import argparse
 import json
 from src.discovery import discoverWotDir
-from src.wot_directory import fetch_tds, fetch_things
-from src.td_parser import list_endpoints
+from src.wotDirectory import fetchThings
+from src.tdParser import listEndpoints
 import src.utils as utils
 
 jsonSave = 'wotDirectories.json'
@@ -15,37 +15,38 @@ def discover():
     if wotDirectories:
         for i, directory in enumerate(wotDirectories):
             print(f"[{i}] {directory}")
-        # Save directories to a JSON file
-        utils.save_to_file([str(directory) for directory in wotDirectories], jsonSave)
+        
+        utils.saveToFile([str(directory) for directory in wotDirectories], jsonSave)
+
     else:
         print("No WoT directories found")
 
 def connect(index):
     
-    wotDirectories = utils.loadFromFile(jsonSave)
-    jsonString = wotDirectories[index].replace("'", '"')
+    wotDirectories = utils.loadFromFile(jsonSave) 
+    jsonString = wotDirectories[index].replace("'", '"') #String treatment
     jsonString = jsonString.replace('b"', '"').replace('None', 'null')
-    wotDirectory = json.loads(jsonString)
+    wotDirectory = json.loads(jsonString) #Transform to dict
     
-    if 0 <= index < len(wotDirectories):
-
+    if 0 <= index < len(wotDirectories): #If there is the said index
+ 
         ip =  wotDirectory['ip']
         port = wotDirectory['port']
-        print(f"Connecting to WoT Directory at {ip}...")
+        print(f"Connecting to WoT Directory at: {ip}...")
         portNIp = {
             "ip": ip,
             "port": port
         }
-        things = fetch_things(portNIp)  # Fetch Things from the directory
+        things = fetchThings(portNIp)  #Fetch things from the directory
 
-        if things:
+        if things: #If it returns things
             for i, thing in enumerate(things):
                 print(f"[{i}] {thing['id']}")
 
-            utils.save_to_file(things, "things.json")
+            utils.saveToFile(things, "things.json")
             
         else:
-            print(f"No things found in directory {directory_ip}")
+            print(f"No things found in directory: {directory_ip}")
     else:
         print("Invalid directory index!")
 
@@ -58,14 +59,12 @@ def list_things():
             print(f"  ID: {thing.get('id')}")
             print(f"  Base URL: {thing.get('base', 'Not available')}")
             
-            # Print the actions if they exist
-            if 'actions' in thing:
+            if 'actions' in thing: #If there are "actions" property
                 print("  Actions:")
                 for action, details in thing['actions'].items():
                     print(f"    {action}: {details.get('forms', [{}])[0].get('href')}")
 
-            # Print the properties if they exist
-            if 'properties' in thing:
+            if 'properties' in thing: #If there are "properties" property
                 print("  Properties:")
                 for prop, details in thing['properties'].items():
                     print(f"    {prop}: {details.get('forms', [{}])[0].get('href')}")
@@ -78,7 +77,7 @@ def list_thing_endpoints(index):
     things = utils.loadFromFile(thingsSave)
     if 0 <= index < len(things):
         thing = things[index]
-        endpoints = list_endpoints(thing)
+        endpoints = listEndpoints(thing)
         if endpoints:
             print(f"Endpoints for Thing '{thing["id"]}':")
             for endpoint in endpoints:

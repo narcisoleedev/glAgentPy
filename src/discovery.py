@@ -4,32 +4,30 @@ from zeroconf import Zeroconf, ServiceBrowser, ServiceListener
 
 class MyListener(ServiceListener):
     def __init__(self):
-        self.wot_directories = []
+        self.wotDirectories = []
 
-    def add_service(self, zeroconf, service_type, name):
-        info = zeroconf.get_service_info(service_type, name)
+    def add_service(self, zeroconf, serviceType, name):
+        info = zeroconf.get_service_info(serviceType, name)
         if info:
-            ip = socket.inet_ntoa(info.addresses[0]) # Converte de 32bit para decimal
-            info_data = {
+            ip = socket.inet_ntoa(info.addresses[0]) #32bit to decimal
+            infoData = {
                 "name": name,
                 "ip": ip,
                 "port": info.port,
                 "properties": info.properties
             }
-            self.wot_directories.append(info_data)
+            self.wotDirectories.append(infoData)
 
 def discoverWotDir():
     zeroconf = Zeroconf()
     listener = MyListener()
     ServiceBrowser(zeroconf, "_wot._tcp.local.", listener)
 
-    # Allow some time for discovery
-    time.sleep(5)
+    time.sleep(5) #Allow some time for discovery
 
-    # Print directories with readable IP addresses
-    for directory in listener.wot_directories:
+    for directory in listener.wotDirectories: #Print directories with readable IP addresses
         print(f"Service: {directory['name']}, IP: {directory['ip']}, Port: {directory['port']}, Properties: {directory['properties']}")
     
-    zeroconf.close()
+    zeroconf.close() #Close connection
 
-    return listener.wot_directories
+    return listener.wotDirectories

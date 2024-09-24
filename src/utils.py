@@ -1,14 +1,12 @@
 import json
 import os
 
-# Save data to a JSON file
-def save_to_file(data, filename):
-    with open(filename, 'w') as file:
-        json.dump(data, file)
+def saveToFile(data, filename): #Save data to a JSON file
+    with open(filename, 'w') as f:
+        json.dump(data, f)
 
-# Load data from a JSON file
-def loadFromFile(filename):
+def loadFromFile(filename): #Load data from a JSON file
     if os.path.exists(filename):
-        with open(filename, 'r') as file:
-            return json.load(file)
+        with open(filename, 'r') as f:
+            return json.load(f)
     return None
