@@ -3,6 +3,7 @@ import json
 from src.discovery import discoverWotDir
 from src.wotDirectory import fetchThings
 from src.tdParser import listEndpoints
+from src.connectEndpoint import connectEndpoint
 import src.utils as utils
 
 jsonSave = 'wotDirectories.json'
@@ -73,19 +74,12 @@ def listThings():
     else:
         print("No things connected. Use 'gl connect' to connect to a directory.")
 
-def listThingsEndpoint(index):
+def connectEndpoint(index, endpoint):
     things = utils.loadFromFile(thingsSave)
-    if 0 <= index < len(things):
-        thing = things[index]
-        endpoints = listEndpoints(thing)
-        if endpoints:
-            print(f"Endpoints for Thing '{thing["id"]}':")
-            for endpoint in endpoints:
-                print(endpoint)
-        else:
-            print("No endpoints found for this Thing")
-    else:
-        print("Invalid thing index!")
+    base = (thing.[index])get('base')
+    if base: 
+        print(connectEndpoint(base, endpoint))
+
 
 def main():
     global wotDirectories, things
@@ -103,8 +97,9 @@ def main():
 
     subparsers.add_parser('list', help="List all Things in the connected WoT directory") #List all things
 
-    endpoint_parser = subparsers.add_parser('endpoints', help="List all endpoints of a specific Thing") #List all endpoints for a specific thing
-    endpoint_parser.add_argument('index', type=int, help="Index of the Thing to list endpoints for")
+    endpoint_parser = subparsers.add_parser('request', help="Do a request to a Thing") #List all endpoints for a specific thing
+    endpoint_parser.add_argument('index', type=int, help="Index of the Thing to request for")
+    endpoint_parser.add_argument('endpoint', type=str, help="The endpoint")
 
     args = parser.parse_args()
 
@@ -117,8 +112,8 @@ def main():
     elif args.command == 'list':
         listThings()
 
-    elif args.command == 'endpoints':
-        listThingsEndpoint(args.index)
+    elif args.command == 'request':
+        connectEndpoint(args.index, args.endpoint)
 
 if __name__ == "__main__":
     main()
