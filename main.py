@@ -3,7 +3,7 @@ import json
 from src.discovery import discoverWotDir
 from src.wotDirectory import fetchThings
 from src.tdParser import listEndpoints
-from src.connectEndpoint import connectEndpoint
+from src.connect import connectThing
 import src.utils as utils
 
 jsonSave = 'wotDirectories.json'
@@ -76,9 +76,13 @@ def listThings():
 
 def connectEndpoint(index, endpoint):
     things = utils.loadFromFile(thingsSave)
-    base = (thing.[index])get('base')
-    if base: 
-        print(connectEndpoint(base, endpoint))
+    indexInt = int(index)  
+    base = things[indexInt].get('base')  
+
+    if type(base) == str:
+        print(f"Base URL: {base}")
+        res = connectThing(base, endpoint)
+        print(res)
 
 
 def main():
