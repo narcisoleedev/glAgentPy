@@ -22,12 +22,15 @@ Tudo pronto? Então só use um dos comandos abaixo para usar.
 
 # Commands
 
-positional arguments:
-  {discover,connect,list,endpoints}
+**positional arguments**:
+
+  {discover, connect, list, endpoints}
+
     discover            Discover WoT directories
     connect             Connect to a WoT directory
-    list                List all Things in the connected WoT directory
-    endpoints           List all endpoints of a specific Thing
+    list                List all Things in the connected WoT directory</ul>
+    endpoints           List ndpoints of a specific Thing
 
-options:
+**options**:
+
   -h, --help            show this help message and exit
